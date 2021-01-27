@@ -1,6 +1,7 @@
 #include <errno.h>
 #include "syscall.h"
 #include "atomic.h"
+#include <stddef.h>
 
 #ifdef SYS_cacheflush
 int _flush_cache(void *addr, int len, int op)
@@ -11,10 +12,17 @@ weak_alias(_flush_cache, cacheflush);
 #endif
 
 #ifdef SYS_cachectl
+#if __kvx__
+int __cachectl(void *addr, size_t len, unsigned long cache, unsigned long flags)
+{
+	return syscall(SYS_cachectl, addr, len, cache, flags);
+}
+#else
 int __cachectl(void *addr, int len, int op)
 {
 	return syscall(SYS_cachectl, addr, len, op);
 }
+#endif
 weak_alias(__cachectl, cachectl);
 #endif
 
