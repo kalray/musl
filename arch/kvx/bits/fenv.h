@@ -1,7 +1,7 @@
 /* Each core of the Coolidge processor have a coprocessor. They share
    the CS register but have distinct bit-fields for their
-   floating-point environment.  This implementation synchronizes them
-   in such a way that they cannot be managed separately. */
+   floating-point environment.
+   This implementation allow them to be managed separately. */
 
 /* Compute Status ($cs) register contains the following bit-fields for
    floating-point execption flags.
@@ -19,25 +19,23 @@
    XUN       Underflow (coprocessor)
    XIN       Inexact (coprocessor) */
 
-#define _FE_INVALID   0x02
-#define _FE_DIVBYZERO 0x04
-#define _FE_OVERFLOW  0x08
-#define _FE_UNDERFLOW 0x10
-#define _FE_INEXACT   0x20
+#define FE_INVALID   0x02
+#define FE_DIVBYZERO 0x04
+#define FE_OVERFLOW  0x08
+#define FE_UNDERFLOW 0x10
+#define FE_INEXACT   0x20
 
-#define _FE_X_INVALID   0x0200
-#define _FE_X_DIVBYZERO 0x0400
-#define _FE_X_OVERFLOW  0x0800
-#define _FE_X_UNDERFLOW 0x1000
-#define _FE_X_INEXACT   0x2000
+#define FE_X_INVALID   0x0200
+#define FE_X_DIVBYZERO 0x0400
+#define FE_X_OVERFLOW  0x0800
+#define FE_X_UNDERFLOW 0x1000
+#define FE_X_INEXACT   0x2000
 
-#define FE_INVALID   (_FE_INVALID   | _FE_X_INVALID)
-#define FE_DIVBYZERO (_FE_DIVBYZERO | _FE_X_DIVBYZERO)
-#define FE_OVERFLOW  (_FE_OVERFLOW  | _FE_X_OVERFLOW)
-#define FE_UNDERFLOW (_FE_UNDERFLOW | _FE_X_UNDERFLOW)
-#define FE_INEXACT   (_FE_INEXACT   | _FE_X_INEXACT)
+#define _FE_EXCEPT (FE_INVALID|FE_DIVBYZERO|FE_OVERFLOW|FE_UNDERFLOW|FE_INEXACT)
+#define _FE_X_EXCEPT (FE_X_INVALID|FE_X_DIVBYZERO|FE_X_OVERFLOW|FE_X_UNDERFLOW|FE_X_INEXACT)
 
-#define FE_ALL_EXCEPT (FE_INVALID|FE_DIVBYZERO|FE_OVERFLOW|FE_UNDERFLOW|FE_INEXACT)
+#define FE_ALL_EXCEPT (_FE_EXCEPT|_FE_X_EXCEPT)
+
 
 /* Compute Status ($cs) register contains the following bit-fields for
    floating-point rounding modes.
