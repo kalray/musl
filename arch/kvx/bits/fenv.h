@@ -76,8 +76,6 @@ typedef unsigned long fexcept_t;
 /* The type representing the entire floating-point environment.  The
    environment is simply a copy from the FPU related bits in the CS
    register. */
-typedef struct {
-	unsigned long __cw;
-} fenv_t;
+typedef	unsigned long fenv_t;
 
 #define FE_DFL_ENV      ((const fenv_t *) -1)
