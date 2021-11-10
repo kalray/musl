@@ -53,7 +53,7 @@ int fegetenv(fenv_t *envp)
 
 int fesetenv(const fenv_t *envp)
 {
-	fenv_t fe = *envp;
+	fenv_t fe = (envp != FE_DFL_ENV ? *envp : 0);
 	fe &= (FE_ALL_EXCEPT | FE_RND_MASK);
 	set_clr_cs(fe, FE_ALL_EXCEPT | FE_RND_MASK);
 	return 0;
