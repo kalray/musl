@@ -119,3 +119,10 @@ static __inline long __syscall6(long n, long a, long b, long c, long d, long e, 
 
 #define __SYSCALL_LL_E(x) (x)
 #define __SYSCALL_LL_O(x) (x)
+
+/*  Linux provides two set of syscalls handler for msgctl, semctl,
+    shmctl. An older set which parses IPC_64 version from the function
+    cmd argument and a new set which hardcodes IPC_64 version.
+    In kvx-linux we use the newer set, therefore we musn't pass IPC_64 version
+    in cmd */
+#define IPC_64 0
