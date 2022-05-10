@@ -6,21 +6,13 @@
 #define SIGSTKSZ 12288
 #endif
 
-#if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
 typedef unsigned long greg_t;
 typedef unsigned long gregset_t[64];
 
 typedef struct sigcontext {
-	unsigned long fault_address;
 	unsigned long regs[64];
-	unsigned long sp, pc, pstate;
+	unsigned long lc, le, ls, ra, cs, pc;
 } mcontext_t;
-
-#else
-typedef struct {
-	long double __regs[64];
-} mcontext_t;
-#endif
 
 struct sigaltstack {
 	void *ss_sp;
@@ -32,8 +24,8 @@ typedef struct __ucontext {
 	unsigned long uc_flags;
 	struct __ucontext *uc_link;
 	stack_t uc_stack;
-	sigset_t uc_sigmask;
 	mcontext_t uc_mcontext;
+	sigset_t uc_sigmask;
 } ucontext_t;
 
 #define SA_NOCLDSTOP  1
