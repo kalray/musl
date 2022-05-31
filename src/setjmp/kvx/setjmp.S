@@ -1,12 +1,16 @@
-#define QUAD_REG_SIZE 32
-#define DBL_REG_SIZE 16
+#define REG_SIZE 8
 
-/**
- * Simply save the user context to $r0 (jmpbuf)
- *
- * This function has the following prototype:
- * int setjmp (r0 = jmp_buf env)
+/*
+ * Save the user context to $r0 (jmpbuf)
+ * jmpbuf layout:
+ * [0]  = $ra,  $sp,  $cs,  $r14,
+ * [4]  = $r20, $r21, $r22, $r23,
+ * [8]  = $r24, $r25, $r26, $r27,
+ * [12] = $r28, $r29, $r30, $r31,
+ * [16] = $r18, $r19,
+ * [18] = $lc,  $le,  $ls,  xxxx
  */
+
 .global ___setjmp
 .hidden ___setjmp
 .global __setjmp
@@ -19,34 +23,24 @@ ___setjmp:
 __setjmp:
 _setjmp:
 setjmp:
-	/* Save r20r21r22r23 */
-	so (QUAD_REG_SIZE)[$r0] = $r20r21r22r23
+	sq (16 * REG_SIZE)[$r0] = $r18r19
 	get $r40 = $ra
-	copyd $r36 = $sp
+	copyd $r41 = $sp
 	;;
-	/* Save r24r25r26r27 */
-	so (2 * QUAD_REG_SIZE) [$r0] = $r24r25r26r27
-	get $r41 = $cs
-	/* Store $ra and cs*/
-	copyd $r38 = $r18
+	so (4 * REG_SIZE)[$r0] = $r20r21r22r23
+	get $r42 = $cs
+	copyd $r43 = $r14
 	;;
-	copyd $r37 = $r14
-	copyd $r39 = $r19
+	so (0 * REG_SIZE)[$r0] = $r40r41r42r43
+	get $r40 = $lc
 	;;
-	/* Save r12(sp) r14 r18 r19 stored in $r36r37r38r39 */
-	so (0)[$r0] = $r36r37r38r39
-	get $r32 = $lc
+	so (8 * REG_SIZE)[$r0] = $r24r25r26r27
+	get $r41 = $le
 	;;
-	/* Save r28r29r30r31 */
-	so (3 * QUAD_REG_SIZE) [$r0] = $r28r29r30r31
-	get $r33 = $le
+	so (12 * REG_SIZE)[$r0] = $r28r29r30r31
+	get $r42 = $ls
 	;;
-	/* Save $cs and $ra */
-	sq (4 * QUAD_REG_SIZE)[$r0] = $r40r41
-	get $r34 = $ls
-	;;
-	/* Save $lc, $le and $ls */
-	so (4 * QUAD_REG_SIZE + DBL_REG_SIZE)[$r0] = $r32r33r34r35
+	so (18 * REG_SIZE)[$r0] = $r40r41r42r43
 	make $r0 = 0
 	ret
 	;;
