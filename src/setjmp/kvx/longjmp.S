@@ -1,8 +1,6 @@
 #define REG_SIZE 8
 
-/**
- * void __longjmp(__jmp_buf __env, int __val)
- */
+/* void __longjmp(__jmp_buf __env, int __val) */
 .global _longjmp
 .global longjmp
 .type _longjmp,@function

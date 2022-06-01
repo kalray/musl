@@ -1,6 +1,7 @@
 #define REG_SIZE 8
 
 /*
+ * int setjmp(jmpbuf env)
  * Save the user context to $r0 (jmpbuf)
  * jmpbuf layout:
  * [0]  = $ra,  $sp,  $cs,  $r14,
@@ -10,7 +11,6 @@
  * [16] = $r18, $r19,
  * [18] = $lc,  $le,  $ls,  xxxx
  */
-
 .global ___setjmp
 .hidden ___setjmp
 .global __setjmp

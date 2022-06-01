@@ -1,8 +1,9 @@
-/* __clone(func, stack, flags, arg, ptid, tls, ctid)
+/*
+ * __clone(func, stack, flags, arg, ptid, tls, ctid)
  *         r0,   r1,    r2,    r3,  r4,   r5,  r6
-
+ *
  * sys_clone(flags, stack, ptid, ctid, tls)
- *	      r0,    r1,    r2,   r3,   r4
+ *           r0,    r1,    r2,   r3,   r4
  */
 .global __clone
 .hidden __clone
@@ -23,7 +24,7 @@ __clone:
 	copyd $r2 = $r4
 	/* Set child_tidptr */
 	copyd $r3 = $r6
-	/* Set tls */ 
+	/* Set tls */
 	copyd $r4 = $r5
 	;;
 	scall 220 /* __NR_clone */
