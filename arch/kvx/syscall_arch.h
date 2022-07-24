@@ -4,7 +4,7 @@
  * Mark all arguments registers as per ABI in the range r1-r5 as
  * clobbered when they are not used for the invocation of the scall
  */
-#define ASM_CLOBBERS "cc", "memory" \
+#define ASM_CLOBBERS "cc", "memory", \
 	"r7", "r8", "r9", "r10", "r11",	/* unused argument registers */ \
 	"r15",                          /* struct pointer            */ \
 	"r16", "r17",                   /* veneer registers          */ \
