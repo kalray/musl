@@ -3,6 +3,8 @@
  * store NEW in MEM. Return the initial value in MEM. Success is
  * indicated by comparing RETURN with OLD.
  */
+
+#if defined(CONFIG_KVX_SUBARCH_KV3_1)
 #define __cmpxchg(ptr, old, new, op_suffix) \
 ({ \
 	__typeof((ptr)) __cxc__ptr = (ptr);                             \
@@ -28,6 +30,35 @@
 	} while (1);                                                    \
 	(__cxc__ro);                                                    \
 })
+#elif defined(CONFIG_KVX_SUBARCH_KV3_2)
+#define __cmpxchg(ptr, old, new, op_suffix) \
+({ \
+	__typeof((ptr)) __cxc__ptr = (ptr);                             \
+	register unsigned long __cxc__rn __asm__("$r62") = (unsigned long) (new); \
+	register unsigned long __cxc__ro __asm__("$r63") = (unsigned long) (old); \
+	do {                                                            \
+		__asm__ __volatile__ (                                  \
+			"acswap" #op_suffix " $r62, [%[rPtr]] = $r62r63\n"    \
+			: "+r" (__cxc__rn), "+r" (__cxc__ro)            \
+			: [rPtr] "r" (__cxc__ptr)                       \
+			: "memory");                                    \
+		/* Success */                                           \
+		if (__cxc__rn) {                                        \
+			__cxc__ro = (unsigned long) (old);              \
+			break;                                          \
+		}                                                       \
+		/* We failed, read value */                             \
+		__cxc__ro = (unsigned long) *(__cxc__ptr);              \
+		if (__cxc__ro != (unsigned long) (old))                 \
+			break;                                          \
+		/* __cxc__rn has been cloberred by cmpxch result */     \
+		__cxc__rn = (unsigned long) (new);                      \
+	} while (1);                                                    \
+	(__cxc__ro);                                                    \
+})
+#else
+#error "Unknown CONFIG_KVX_SUBARCH"
+#endif /* CONFIG_KVX_SUBARCH_KV3_X */
 
 #define cmpxchg(ptr, o, n) \
 ({ \
