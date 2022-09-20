@@ -4,7 +4,7 @@
  * indicated by comparing RETURN with OLD.
  */
 
-#if defined(CONFIG_KVX_SUBARCH_KV3_1)
+#if defined(__kvxarch_kv3_1)
 #define __cmpxchg(ptr, old, new, op_suffix) \
 ({ \
 	__typeof((ptr)) __cxc__ptr = (ptr);                             \
@@ -30,7 +30,7 @@
 	} while (1);                                                    \
 	(__cxc__ro);                                                    \
 })
-#elif defined(CONFIG_KVX_SUBARCH_KV3_2)
+#elif defined(__kvxarch_kv3_2)
 #define __cmpxchg(ptr, old, new, op_suffix) \
 ({ \
 	__typeof((ptr)) __cxc__ptr = (ptr);                             \
@@ -57,8 +57,8 @@
 	(__cxc__ro);                                                    \
 })
 #else
-#error "Unknown CONFIG_KVX_SUBARCH"
-#endif /* CONFIG_KVX_SUBARCH_KV3_X */
+#error "Unknown kvx subarchitecture"
+#endif /* __kvxarch_kv3_1 */
 
 #define cmpxchg(ptr, o, n) \
 ({ \
