@@ -7,7 +7,7 @@
 #endif
 
 typedef unsigned long greg_t;
-typedef unsigned long gregset_t[64];
+typedef unsigned long gregset_t[70];
 
 typedef struct sigcontext {
 	unsigned long regs[64];
