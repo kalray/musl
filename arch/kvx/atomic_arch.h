@@ -12,7 +12,7 @@
 	register unsigned long __cxc__ro __asm__("$r63") = (unsigned long) (old); \
 	do {                                                            \
 		__asm__ __volatile__ (                                  \
-			"acswap" #op_suffix " 0[%[rPtr]], $r62r63\n"    \
+			"acswap" #op_suffix " 0[%[rPtr]] = $r62r63\n"    \
 			: "+r" (__cxc__rn), "+r" (__cxc__ro)            \
 			: [rPtr] "r" (__cxc__ptr)                       \
 			: "memory");                                    \
@@ -38,7 +38,7 @@
 	register unsigned long __cxc__ro __asm__("$r63") = (unsigned long) (old); \
 	do {                                                            \
 		__asm__ __volatile__ (                                  \
-			"acswap" #op_suffix " $r62, [%[rPtr]] = $r62r63\n"    \
+			"acswap" #op_suffix " $r62 = [%[rPtr]] = $r62r63\n"    \
 			: "+r" (__cxc__rn), "+r" (__cxc__ro)            \
 			: [rPtr] "r" (__cxc__ptr)                       \
 			: "memory");                                    \

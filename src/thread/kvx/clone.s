@@ -30,7 +30,7 @@ __clone:
 	scall 220 /* __NR_clone */
 	;;
 	/* If 0, then we are the child */
-	cb.deqz $r0, 1f
+	cb.deqz $r0? 1f
 	;;
 	/* Else we are the parent */
 	ret
